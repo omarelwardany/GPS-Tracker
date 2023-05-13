@@ -47,23 +47,23 @@ while(1){
 				
 				
 				 
-				if(displacement>=10)
+				if(displacement>=5)
 					{ 		
 					led_off(GPIO_ALL_LEDS);
-			    led_on(GPIO_RED_LED);/*turn on red led when distance >100*/   
+			    led_on(GPIO_RED_LED);/*turn on red led when distance >=5*/   
 			    }
 				
-				if(displacement>=0 && displacement<5)
+				if(displacement>=0 && displacement<1)
 				{
 					led_off(GPIO_ALL_LEDS);
 					led_on(GPIO_GREEN_LED);
-												/*turn on green led when 0<distance <1*/
+												/*turn on green led when 0<=distance <1*/
 				}	
-				if(displacement>=5 && displacement<10)
+				if(displacement>=1 && displacement<5)
 				{
 					led_off(GPIO_ALL_LEDS);
 					led_on(GPIO_GREEN_LED);
-					led_on(GPIO_RED_LED); //turn on yellow led when 1<distance<100
+					led_on(GPIO_RED_LED); //turn on yellow led when 1<=distance<5
 				}	
 		    
 			if(counter==2){				//reset the counter of the array
