@@ -49,3 +49,59 @@ SysTick_Wait1us(40);//delay 40us
 
 
 
+// Displays a string
+void LCD_displayString(const char *Str)
+{
+	uint8_t i = 0;
+	while(Str[i] != '\0')
+	{
+		LCD_displayCharacter(Str[i]);
+		i++;
+	}
+} 
+
+// Displays a character
+void LCD_displayCharacter(uint8_t data)
+{
+	GPIO_PORTB_DATA_R |=0x01; // Instruction Mode RS = 1 / write data to LCD so RW = 0 / ENABLE = 0
+	GPIO_PORTB_DATA_R = ( GPIO_PORTB_DATA_R & 0x0F) | (data& 0xF0);
+	GPIO_PORTB_DATA_R |=0X04; // enable = 1
+	SysTick_Wait1us(40); 	 
+	GPIO_PORTB_DATA_R &=0xFB; // enable = 0
+	GPIO_PORTB_DATA_R = ((	GPIO_PORTB_DATA_R & 0x0F) | ((data<< 4)&0xF0));/*write data*/
+	GPIO_PORTB_DATA_R |=0X04; // enable = 1
+	SysTick_Wait1us(40); 	
+	GPIO_PORTB_DATA_R &=0xFB; // enable = 0
+	SysTick_Wait1us(40); 	 
+}
+
+
+
+// Clears LCD screen
+void LCD_Clear()
+{
+	LCD_sendCommand(1); // clear diplay
+	LCD_sendCommand(0x80); //LCD cursor location
+	SysTick_Wait1ms(500);
+}	
+
+		
+
+// Used to convert float numbers to string and diplay on the lcd
+void LCD_displayfloat(float data)
+{
+	char str[7];
+	int i;
+	i=0;
+	sprintf(str,"%f",data); // convert float to string
+	LCD_sendCommand(1); // clear display
+	LCD_sendCommand(0x80); // LCD cursor location
+		
+	while(str[i] != '\0')
+	{
+		LCD_displayCharacter(str[i]);
+		i++;
+	}
+	SysTick_Wait1ms(500); // delay 500ms
+}
+// EOF
